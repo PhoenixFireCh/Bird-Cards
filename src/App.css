@@ -26,10 +26,24 @@
   transition: box-shadow 0.5s ease;
 }
 
+
 .quiz button:hover, .submit:hover {
   box-shadow: 0px 2px rgb(32, 32, 32),
   inset 0px 8px rgb(15, 17, 20);
   cursor: pointer;
+}
+
+.greyedOut {
+  color: rgb(86, 95, 138) !important;
+}
+
+.greyedOut:hover {
+  box-shadow: unset !important;
+  transition: unset !important;
+}
+
+.text {
+  padding: 5px 0px 5px 0px;
 }
 
 .submit {
@@ -74,7 +88,18 @@
   border-radius: 20px;
 }
 
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
+}
 
+.shake {
+  animation: shake 0.4s ease-in-out;
+}
 /* Card flipping area */
 .card {
   width: 500px;

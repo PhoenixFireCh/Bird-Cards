@@ -1,4 +1,5 @@
 import './App.css';
+import confetti from "canvas-confetti"; //Fun stuff, import from npm install canvas-confetti
 import { use, useState } from 'react';
 
 const App = () => {
@@ -12,14 +13,40 @@ const App = () => {
     {imageSrc: './raven.jpg', ans: 'Common Raven', order: 'url(./pas.png)'},
   ];
   const initialCard = {imageSrc: 'none', ans: 'Can you guess the bird?', order: ''}
+  const fireConfetti = () => {
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 }
+    });
+  };
 
   const [reviewedCount, setReviewedCount] = useState(0); //Amount of cards seen
   const [currentIndex, setCurrentIndex] = useState(null); // Current index
   const [currCard, setCurrCard] = useState(initialCard);
   const [cardList, setCardList] = useState([...items]); // Allows things to be synced when shuffling
   const [state, setState] = useState(false); // State the card is in, false meaning unflipped, true being flipped
+  const [userGuess, setGuess] = useState('');
+  const [correct, setCorrect] = useState(false);
 
   const count = cardList.length;
+
+  const handleChange = (e) => {
+    setGuess(e.target.value);
+  }
+  
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (currCard.ans.toLocaleLowerCase() == userGuess.toLocaleLowerCase()) {
+      console.log("CORREVT");
+      fireConfetti();
+    } else {
+      setCorrect(true);
+      setTimeout(() => setCorrect(false), 400);
+      return;
+    }
+  }
 
   const flipCard = () => {
     setState(state => !state);
@@ -46,7 +73,7 @@ const App = () => {
     if (reviewedCount < count) {
       setReviewedCount(reviewedCount + 1);
     }
-    //Changes background
+    //Changes the card
     setCurrentIndex(index);
     setCurrCard(cardList[index]);
   }
@@ -60,13 +87,16 @@ const App = () => {
     setCurrCard(cardList[index]);
   }
 
+  //Visual variables
   const flip = {
     transform: state ? "rotateY(0deg)" : "rotateY(180deg)",
     transition: "transform 0.8s"
   };
   const imgVisibility = currCard.imageSrc == 'none' ? 'none': 'unset';
   const mainText = currCard.imageSrc == 'none' ? "Can you guess the bird?" : "Whats this bird?";
-
+  const buttonGreyOutPrev = currentIndex > 0 ? '' : 'greyedOut';
+  const buttonGreyOutNext = currentIndex < (count - 1) ? '' : 'greyedOut';
+  const isShaking = correct ? 'card shake' : 'card';
 
   return(
     <div className='App'>
@@ -78,7 +108,7 @@ const App = () => {
       <h3>{reviewedCount} out of {count} cards reviewed</h3>
 
       <div className="quiz">
-        <div onClick={flipCard} className='card'>
+        <div onClick={flipCard} className={isShaking} >
           <div className="flipCardInner" style={flip}>
               <div className="flipCardFront" style={{backgroundImage: currCard.order}}>
                 <p><strong>{mainText}</strong></p>
@@ -89,14 +119,14 @@ const App = () => {
               </div>
           </div>
         </div>
-        <form className="formBox">
-          <input placeholder="Make a guess!" type="text"></input>
+        <form className="formBox" onSubmit={handleSubmit}>
+          <input placeholder="Make a guess!" type="text" onChange={handleChange} className='text'></input>
           <input type="submit" className='submit'></input>
         </form>
 
         <div className='actionBox'>
-          <button onClick={prevCard}><strong>{'<'}</strong></button>
-          <button onClick={nextCard}><strong>{'>'}</strong></button>
+          <button onClick={prevCard} className={buttonGreyOutPrev}><strong>{'<'}</strong></button>
+          <button onClick={nextCard} className={buttonGreyOutNext}><strong>{'>'}</strong></button>
           <button onClick={shuffle}><strong>Shuffle</strong></button>
         </div>
       </div>
