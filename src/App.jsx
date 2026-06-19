@@ -12,8 +12,18 @@ const App = () => {
     {imageSrc: './golden eagle.jpg', ans: 'Golden Eagle', order: 'url(./acc.png)'},
     {imageSrc: './raven.jpg', ans: 'Common Raven', order: 'url(./pas.png)'},
   ];
+  const count = items.length;
   const initialCard = {imageSrc: 'none', ans: 'Can you guess the bird?', order: ''}
-  const fireConfetti = () => {
+  const [currCard, setCurrCard] = useState(initialCard); // The current card object active
+  const [cardList, setCardList] = useState([...items]); // Allows things to be synced when shuffling
+  const [reviewedCount, setReviewedCount] = useState(0); //Amount of cards seen
+  const [streak, setStreak] = useState(Array(count).fill(0)); // The streak on whether each index is correct (prevents streak spamming).
+  const [longestStreak, setLongestStreak] = useState(0); // The longest streak
+  const [currentIndex, setCurrentIndex] = useState(-1); // Current index
+  const [state, setState] = useState(false); // State the card is in, false meaning unflipped, true being flipped
+  const [userGuess, setGuess] = useState(''); // Current user guess
+  const [incorrect, setIncorrect] = useState(false); //Whether the answer is incorrect (activates shake)
+  const fireConfetti = () => { //Confetti :>
     confetti({
       particleCount: 150,
       spread: 70,
@@ -21,50 +31,47 @@ const App = () => {
     });
   };
 
-  const [reviewedCount, setReviewedCount] = useState(0); //Amount of cards seen
-  const [currentIndex, setCurrentIndex] = useState(null); // Current index
-  const [currCard, setCurrCard] = useState(initialCard);
-  const [cardList, setCardList] = useState([...items]); // Allows things to be synced when shuffling
-  const [state, setState] = useState(false); // State the card is in, false meaning unflipped, true being flipped
-  const [userGuess, setGuess] = useState('');
-  const [correct, setCorrect] = useState(false);
-
-  const count = cardList.length;
-
-  const handleChange = (e) => {
+  const handleChange = (e) => { // Handles guess change
     setGuess(e.target.value);
   }
   
-
-  const handleSubmit = (e) => {
+  const handleSubmit = (e) => { //Handles the submit upon hitting form submit and checks user answer.
     e.preventDefault();
     if (currCard.ans.toLocaleLowerCase() == userGuess.toLocaleLowerCase()) {
-      console.log("CORREVT");
+      let newStreak = [...streak]; 
+      newStreak[currentIndex] = 1;
+      setStreak(newStreak);
+      let updatedStreak = newStreak.reduce((a, b) => a + b, 0);
+      if (updatedStreak > longestStreak) {
+        setLongestStreak(updatedStreak);
+      }
       fireConfetti();
     } else {
-      setCorrect(true);
-      setTimeout(() => setCorrect(false), 400);
+      setStreak(Array(count).fill(0));
+      setIncorrect(true);
+      setTimeout(() => setIncorrect(false), 400);
       return;
     }
   }
 
-  const flipCard = () => {
+  const flipCard = () => { // Flips the card state
     setState(state => !state);
   }
 
-  const shuffle = () => {
+  const shuffle = () => { // Shuffles the card and resets everything
     let n = cardList;
     for (let i = 0; i < n.length; i++) {
       let r = Math.floor(Math.random() * n.length);
       [n[i], n[r]] = [n[r], n[i]];
     }
+    setStreak(Array(count).fill(0));
     setCardList(n);
     setCurrCard(n[0]);
     setCurrentIndex(0);
     setReviewedCount(1);
   }
 
-  const nextCard = () => {
+  const nextCard = () => { // Moves onto the next card
     let index = currentIndex;
     if (currentIndex < count - 1) {
       index++;
@@ -78,7 +85,7 @@ const App = () => {
     setCurrCard(cardList[index]);
   }
 
-  const prevCard = () => {
+  const prevCard = () => { // Moves back to the previous card
     let index = currentIndex;
     if (currentIndex > 0) {
       index--;
@@ -96,7 +103,7 @@ const App = () => {
   const mainText = currCard.imageSrc == 'none' ? "Can you guess the bird?" : "Whats this bird?";
   const buttonGreyOutPrev = currentIndex > 0 ? '' : 'greyedOut';
   const buttonGreyOutNext = currentIndex < (count - 1) ? '' : 'greyedOut';
-  const isShaking = correct ? 'card shake' : 'card';
+  const isShaking = incorrect ? 'card shake' : 'card';
 
   return(
     <div className='App'>
@@ -105,7 +112,11 @@ const App = () => {
         <h2>How good are you at guessing birbs!</h2>
       </div>
 
-      <h3>{reviewedCount} out of {count} cards reviewed</h3>
+      <div className='stats'>
+        <h3>{reviewedCount} out of {count} cards reviewed</h3>
+        <h3>🔥 Current streak {streak.reduce((a, b) => a + b, 0)}</h3>
+        <h3>🐦‍🔥 Highest streak {longestStreak}</h3>
+      </div>
 
       <div className="quiz">
         <div onClick={flipCard} className={isShaking} >
@@ -131,8 +142,6 @@ const App = () => {
         </div>
       </div>
     </div>
-  
-
   );
 }
 
