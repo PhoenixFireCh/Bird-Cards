@@ -1,0 +1,41 @@
+#root {
+  width: 100%;
+}
+
+h1, h2, h3, p, button {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+h1, 
+h2, 
+h3 {
+  color: aliceblue;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.title, .App h3 {
+  background-color: rgb(64, 73, 112);
+  padding: 10px 100px 10px 100px;
+  margin-top: 10px;
+  border-radius: 20px;
+  
+}
+
+body {
+    margin: 0 auto;
+    display: flex;
+    min-height: 100dvh;
+    height: auto;
+    justify-content: center;
+    background-image: url(./background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.App {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

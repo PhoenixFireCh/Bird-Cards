@@ -1,45 +1,3 @@
-#root {
-  width: 100%;
-}
-
-h1, h2, h3, p, button {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-}
-
-h1, 
-h2, 
-h3 {
-  color: aliceblue;
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
-
-.title, .App h3 {
-  background-color: rgb(64, 73, 112);
-  padding: 10px 100px 10px 100px;
-  margin-top: 10px;
-  border-radius: 20px;
-  
-}
-
-body {
-    margin: 0 auto;
-    display: flex;
-    min-height: 100dvh;
-    height: auto;
-    justify-content: center;
-    background-image: url(./background.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-
-.App {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
 .title {
   display: flex;
   justify-content: center;
@@ -56,7 +14,7 @@ body {
   margin-top: 20px;
 }
 
-.quiz button {
+.quiz button, .submit {
   background-color: rgb(64, 73, 112);
   color: aliceblue;
   font-size: 1.5rem;
@@ -68,10 +26,24 @@ body {
   transition: box-shadow 0.5s ease;
 }
 
-.quiz button:hover {
+.quiz button:hover, .submit:hover {
   box-shadow: 0px 2px rgb(32, 32, 32),
   inset 0px 8px rgb(15, 17, 20);
   cursor: pointer;
+}
+
+.submit {
+  margin-top: 0px;
+  padding: 10px  20px 10px 20px;
+  font-size: 1rem;
+}
+
+.actionBox {
+  margin: 20px 0px 20px 0px;
+}
+
+.actionBox button {
+  margin: 0px 10px 0px 10px;
 }
 
 .card p {
@@ -85,6 +57,21 @@ body {
   height: 200px;
   object-fit: contain;
   border-width: 0px;
+}
+
+.formBox {
+  background-color: rgb(66, 67, 71);
+  border-radius: 20px;
+  margin-top: 10px;
+  padding: 10px;
+}
+
+.formBox * {
+  margin: 0px 5px 0px 5px;
+}
+
+.formBox input {
+  border-radius: 20px;
 }
 
 
@@ -122,12 +109,12 @@ body {
 .flipCardFront{
   background-color: antiquewhite;
   border-radius: 10px;
+  transform: rotateY(180deg);
 }
 
 .flipCardBack {
   background-color: antiquewhite;
   border-radius: 10px;
-  transform: rotateY(180deg);
 }
 
 
