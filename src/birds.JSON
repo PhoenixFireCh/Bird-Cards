@@ -1,0 +1,11 @@
+{
+    "birds":[
+        {"imageSrc": "./secretary bird.jpg", "ans": "Secretary Bird", "order": "url(./acc.png)"},
+        {"imageSrc": "./peregrine.jpg", "ans": "Peregrine Falcon", "order": "url(./fal.png)"},
+        {"imageSrc": "./miner.jpg", "ans": "Noisy Miner", "order": "url(./pas.png)"},
+        {"imageSrc": "./american crow.jpg", "ans": "American Crow", "order": "url(./pas.png)"},
+        {"imageSrc": "./red tail.jpg", "ans": "Red Tailed Hawk", "order": "url(./acc.png)"},
+        {"imageSrc": "./golden eagle.jpg", "ans": "Golden Eagle", "order": "url(./acc.png)"},
+        {"imageSrc": "./raven.jpg", "ans": "Common Raven", "order": "url(./pas.png)"}
+    ]
+}

@@ -1,21 +1,13 @@
 import './App.css';
 import confetti from "canvas-confetti"; //Fun stuff, import from npm install canvas-confetti
+import birds from "./birds.json"
 import { use, useState } from 'react';
 
 const App = () => {
-  const items = [
-    {imageSrc: './secretary bird.jpg', ans: 'Secretary Bird', order: 'url(./acc.png)'},
-    {imageSrc: './peregrine.jpg', ans: 'Peregrine Falcon', order: 'url(./fal.png)'},
-    {imageSrc: './miner.jpg', ans: 'Noisy Miner', order: 'url(./pas.png)'},
-    {imageSrc: './american crow.jpg', ans: 'American Crow', order: 'url(./pas.png)'},
-    {imageSrc: './red tail.jpg', ans: 'Red Tailed Hawk', order: 'url(./acc.png)'},
-    {imageSrc: './golden eagle.jpg', ans: 'Golden Eagle', order: 'url(./acc.png)'},
-    {imageSrc: './raven.jpg', ans: 'Common Raven', order: 'url(./pas.png)'},
-  ];
-  const count = items.length;
+  const count = birds.birds.length;
   const initialCard = {imageSrc: 'none', ans: 'Can you guess the bird?', order: ''}
   const [currCard, setCurrCard] = useState(initialCard); // The current card object active
-  const [cardList, setCardList] = useState([...items]); // Allows things to be synced when shuffling
+  const [cardList, setCardList] = useState([...birds.birds]); // Allows things to be synced when shuffling
   const [reviewedCount, setReviewedCount] = useState(0); //Amount of cards seen
   const [streak, setStreak] = useState(Array(count).fill(0)); // The streak on whether each index is correct (prevents streak spamming).
   const [longestStreak, setLongestStreak] = useState(0); // The longest streak
@@ -37,6 +29,11 @@ const App = () => {
   
   const handleSubmit = (e) => { //Handles the submit upon hitting form submit and checks user answer.
     e.preventDefault();
+    if (state) { // Prevents guessing while flipped
+      setIncorrect(true);
+      setTimeout(() => setIncorrect(false), 400);
+      return;
+    }
     if (currCard.ans.toLocaleLowerCase() == userGuess.toLocaleLowerCase()) {
       let newStreak = [...streak]; 
       newStreak[currentIndex] = 1;
